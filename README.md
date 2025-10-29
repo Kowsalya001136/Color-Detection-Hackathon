@@ -37,5 +37,3 @@ It identifies the closest named color, shows RGB & HEX codes, and gives pixel co
 ![Output Screenshot](https://web-production-110e.up.railway.app/static/screenshots/result.png)
 
 ---
-
-## 📂 Project Structure
