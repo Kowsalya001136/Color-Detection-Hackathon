@@ -1,26 +1,41 @@
-# Color Detection from Images — Hackathon Level-2
+# 🎨 Color Detection Web App (Hackathon Project)
 
-## Overview
-This project is a simple web application that allows users to upload an image, click anywhere on the displayed image, and get:
+A smart web-based application that detects accurate pixel colors from uploaded images using real-time analysis.  
+It identifies the closest named color, shows RGB & HEX codes, and gives pixel coordinates.
 
-- RGB values of the clicked pixel
-- HEX code
-- Closest color name from `colors.csv`
-- A color-filled box as reference
+🚀 **Live Demo:** https://web-production-110e.up.railway.app/
 
-Backend: Flask (Python)  
-Frontend: HTML + JavaScript (no frameworks)
+---
 
-## Files
-- `app.py` — Flask backend
-- `templates/index.html` — Web UI
-- `static/uploads/` — Uploaded images stored here
-- `colors.csv` — Color dataset (color_name, R, G, B, HEX)
-- `requirements.txt` — Python dependencies
+## ✅ Features
+✔ Upload any image and detect pixel colors by clicking  
+✔ Shows **Color Name**, **RGB**, **HEX**, pixel location  
+✔ Fast and accurate nearest-color matching  
+✔ Modern UI with Bootstrap  
+✔ Light-weight Flask backend  
+✔ Works on web without installation  
 
-## Setup (local)
-1. Create a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate        # macOS / Linux
-   venv\Scripts\activate           # Windows
+---
+
+## 🛠️ Tech Stack
+| Technology | Purpose |
+|-----------|---------|
+| Python + Flask | Backend Server |
+| HTML + CSS + JS | Frontend UI |
+| Pillow (PIL) | Image processing |
+| Pandas | Color dataset |
+| Gunicorn | Deployment Server |
+
+---
+
+## 📸 Screenshots
+
+### 🖼️ Image Upload Interface
+![UI Screenshot](https://web-production-110e.up.railway.app/static/screenshots/ui.png)
+
+### ✅ Color detection result
+![Output Screenshot](https://web-production-110e.up.railway.app/static/screenshots/result.png)
+
+---
+
+## 📂 Project Structure
