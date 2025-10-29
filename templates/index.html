@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Color Detection App - Hackathon</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+  <div class="container">
+    <h2>Color Detection from Images</h2>
+    <p class="note">Upload an image, then click anywhere on the image to detect that pixel's color.</p>
+
+    <div class="uploader">
+      <form id="uploadForm" method="post" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="image" id="imageInput" accept="image/*" required>
+        <button id="uploadBtn" type="submit">Upload</button>
+        <button id="clearBtn" type="button">Clear</button>
+      </form>
+    </div>
+
+    <div class="image-area">
+      <!-- If server passed an image_url, it will be set here -->
+      {% if image_url %}
+        <img id="theImage" class="detectable" src="{{ image_url }}" alt="Uploaded image">
+      {% else %}
+        <div id="placeholder" style="padding:40px 0;">
+          No image uploaded yet. Upload an image to begin.
+        </div>
+      {% endif %}
+    </div>
+
+    <div id="output" class="result" style="display:none;">
+      <div class="color-box" id="colorBox"></div>
+      <div class="info">
+        <div><strong id="colorName">Color Name</strong></div>
+        <div class="small">RGB: <span id="rgbVal">-</span></div>
+        <div class="small">HEX: <span id="hexVal">-</span></div>
+        <div class="small">Closest dataset entry: <span id="closestName">-</span> (<span id="closestHex">-</span>)</div>
+        <div class="small">Clicked pixel (orig image coords): <span id="pixelCoord">-</span></div>
+      </div>
+    </div>
+
+    <div id="help" style="margin-top:18px;">
+      <p class="small">Tip: If the image is very large, the app will scale it to fit your screen. Click anywhere on the visible image — the app maps your click back to the original image coordinates.</p>
+    </div>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const img = document.getElementById("theImage");
+  const output = document.getElementById("output");
+  const colorBox = document.getElementById("colorBox");
+  const colorNameEl = document.getElementById("colorName");
+  const rgbEl = document.getElementById("rgbVal");
+  const hexEl = document.getElementById("hexVal");
+  const closestNameEl = document.getElementById("closestName");
+  const closestHexEl = document.getElementById("closestHex");
+  const pixelCoordEl = document.getElementById("pixelCoord");
+
+  // Clear button behavior
+  document.getElementById("clearBtn").addEventListener("click", function () {
+    window.location.href = "/";
+  });
+
+  if (img) {
+    img.addEventListener("click", function (ev) {
+      const rect = img.getBoundingClientRect();
+      const clickX = ev.clientX - rect.left;
+      const clickY = ev.clientY - rect.top;
+      const displayW = rect.width;
+      const displayH = rect.height;
+
+      // The server needs the filename; extract from src
+      // src like "/static/uploads/filename.jpg"
+      const src = img.getAttribute("src");
+      const parts = src.split("/");
+      const filename = parts[parts.length - 1];
+
+      // Send POST to /get_color
+      fetch("/get_color", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: filename,
+          click_x: clickX,
+          click_y: clickY,
+          display_width: displayW,
+          display_height: displayH
+        })
+      })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.error) {
+          alert("Error: " + data.error);
+          return;
+        }
+        const rgb = data.rgb;
+        const hex = data.hex;
+        colorBox.style.background = hex;
+        colorNameEl.textContent = data.closest_color.name || "—";
+        rgbEl.textContent = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+        hexEl.textContent = hex;
+        closestNameEl.textContent = data.closest_color.name + ` (${data.closest_color.R},${data.closest_color.G},${data.closest_color.B})`;
+        closestHexEl.textContent = data.closest_color.HEX;
+        pixelCoordEl.textContent = `${data.clicked_pixel.x}, ${data.clicked_pixel.y}`;
+        output.style.display = "flex";
+      })
+      .catch((err) => {
+        console.error("Request failed", err);
+        alert("Failed to get color. See console for details.");
+      });
+    });
+  }
+});
+</script>
+</body>
+</html>
