@@ -3,8 +3,6 @@
 A smart web-based application that detects accurate pixel colors from uploaded images using real-time analysis.  
 It identifies the closest named color, shows RGB & HEX codes, and gives pixel coordinates.
 
-🚀 **Live Demo:** https://web-production-110e.up.railway.app/
-
 ---
 
 ## ✅ Features
@@ -28,10 +26,3 @@ It identifies the closest named color, shows RGB & HEX codes, and gives pixel co
 
 ---
 
-## 📸 Screenshots
-
-### 🖼️ Image Upload Interface
-![UI Screenshot](https://web-production-110e.up.railway.app/static/screenshots/ui.png)
-
-### ✅ Color detection result
-![Output Screenshot](https://web-production-110e.up.railway.app/static/screenshots/result.png)
